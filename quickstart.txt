@@ -1,0 +1,6 @@
+Ralph Loop is running for AgentBond. To continue:
+1. cd /a0/usr/workdir/agentbond
+2. python /a0/usr/workdir/ralph-harness/scripts/ralph_cli.py -w ./ status
+3. python /a0/usr/workdir/ralph-harness/scripts/ralph_cli.py -w ./ next
+4. cat prd.md (for full context)
+5. Read skills from /a0/usr/workdir/agentbond-skills/
