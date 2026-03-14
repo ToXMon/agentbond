@@ -23,6 +23,7 @@ Act as a DEVELOPER agent leading this implementation. Use profile="developer" wh
 - Delegate to studio agents from /a0/usr/workdir/agentbond-skills/studio-agents/
 - Apply interface-craft patterns for UI animations (PRD Section 12)
 - Record each iteration with Ralph CLI
+- COMMIT AND PUSH after completing each day's tasks
 
 ## Critical Context Files
 - PRD: /a0/usr/workdir/agentbond/prd.md
@@ -30,11 +31,83 @@ Act as a DEVELOPER agent leading this implementation. Use profile="developer" wh
 - studio-agents: /a0/usr/workdir/agentbond-skills/studio-agents/
 - interface-craft: /a0/skills/interface-craft/
 
+## Git Repository
+- Repository: https://github.com/ToXMon/agentbond
+- Commit daily progress with: python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py --day N --summary "description" --push
+
 ## Control Signals
 Use RALPH_LOOP:CONTINUE after each iteration until demo is complete.
 
 Start with Day 1 tasks: Clone Scaffold-ETH 2, set up Foundry, create agent package.
 ```
+
+---
+
+## 🔧 GIT WORKFLOW (CRITICAL)
+
+### Repository Information
+- **GitHub URL**: https://github.com/ToXMon/agentbond
+- **Branch**: main
+- **Working Dir**: /a0/usr/workdir/agentbond
+
+### Daily Commit Workflow
+
+At the **END of each day's tasks**, you MUST commit and push progress:
+
+```bash
+# Check what changed
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py --status
+
+# Commit and push day's progress (replace N with day number)
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py \
+  --day N \
+  --summary "Brief description of what was accomplished" \
+  --push
+```
+
+### Commit Message Format
+
+```
+feat(day-N): Brief summary of accomplishments
+
+Completed: YYYY-MM-DD HH:MM:SS
+Files: X changed
+```
+
+### Git Commands Reference
+
+```bash
+# Check status
+cd /a0/usr/workdir/agentbond
+git status
+
+# Stage all changes
+git add -A
+
+# Commit manually
+git commit -m "feat(day-N): Your message here"
+
+# Push to GitHub
+git push origin main
+
+# Or use the helper script for all-in-one:
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py --day N --summary "message" --push
+```
+
+### Daily Commit Requirements
+
+| Day | Commit After Completing |
+|-----|------------------------|
+| Day 1 | Scaffold-ETH 2 cloned, Foundry initialized, agent package created |
+| Day 2 | Agent loop implemented with Venice SDK, memory persistence |
+| Day 3 | Smart contracts: AgentRegistry.sol, ReputationStaking.sol |
+| Day 4 | Smart contracts: TaskEscrow.sol, Foundry tests |
+| Day 5 | Agent tools: vouch.ts, assessRisk.ts |
+| Day 6 | Agent tools: payment.ts, executeTask.ts, integration |
+| Day 7 | Frontend: AgentCard.tsx, VouchingDrawer.tsx |
+| Day 8 | Frontend: TaskExecutionPanel.tsx (with animations), CompletionCelebration.tsx |
+| Day 9 | Demo page integration, end-to-end flow |
+| Day 10 | Final polish, demo video, submission prep |
 
 ---
 
@@ -155,7 +228,7 @@ python /a0/usr/workdir/ralph-harness/scripts/ralph_cli.py -w ./ next
 python /a0/usr/workdir/ralph-harness/scripts/ralph_cli.py -w ./ status
 ```
 
-### 7. Day-by-Day Task Breakdown
+### 7. Day-by-Day Task Breakdown with Git Commits
 
 #### Day 1-2: Foundation
 ```bash
@@ -197,6 +270,14 @@ bun add @venice-dev-tools/core viem zod lowdb
 }
 ```
 
+**🔧 COMMIT DAY 1:**
+```bash
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py \
+  --day 1 \
+  --summary "Scaffold-ETH 2 cloned, Foundry initialized, agent package created with Venice SDK" \
+  --push
+```
+
 #### Day 3-4: Smart Contracts
 
 **Delegate to backend-architect:**
@@ -223,6 +304,14 @@ bun add @venice-dev-tools/core viem zod lowdb
 }
 ```
 
+**🔧 COMMIT DAY 3-4:**
+```bash
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py \
+  --day 3 \
+  --summary "Smart contracts: AgentRegistry, ReputationStaking, TaskEscrow with Foundry tests" \
+  --push
+```
+
 #### Day 5-6: Agent Tools
 
 **Delegate to ai-engineer:**
@@ -245,6 +334,14 @@ bun add @venice-dev-tools/core viem zod lowdb
     OUTPUT: Four tool files with proper error handling."
   }
 }
+```
+
+**🔧 COMMIT DAY 5-6:**
+```bash
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py \
+  --day 5 \
+  --summary "Agent tools: vouch, assessRisk, payment, executeTask with Venice SDK integration" \
+  --push
 ```
 
 #### Day 7-8: Frontend Dashboard
@@ -279,6 +376,14 @@ bun add @venice-dev-tools/core viem zod lowdb
 }
 ```
 
+**🔧 COMMIT DAY 7-8:**
+```bash
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py \
+  --day 7 \
+  --summary "Frontend: AgentCard, TaskExecutionPanel with storyboard animations, CompletionCelebration, VouchingDrawer" \
+  --push
+```
+
 #### Day 9-10: Integration & Demo
 
 **Delegate to rapid-prototyper and test-writer-fixer:**
@@ -301,6 +406,14 @@ bun add @venice-dev-tools/core viem zod lowdb
     OUTPUT: Complete demo page with all animations working."
   }
 }
+```
+
+**🔧 COMMIT DAY 9-10:**
+```bash
+python3 /a0/usr/workdir/ralph-harness/scripts/git_helper.py \
+  --day 9 \
+  --summary "Demo integration: end-to-end flow, celebration animations, ready for submission" \
+  --push
 ```
 
 ---
@@ -373,6 +486,7 @@ Deployed on: Mainnet, Base, Arbitrum, Optimism, **Celo**, Polygon, and 15+ chain
 - [ ] x402 payment flow
 - [ ] Deployed to Celo Alfajores
 - [ ] 2-minute demo video
+- [ ] **Daily commits pushed to GitHub**
 
 ---
 
@@ -391,10 +505,11 @@ Deployed on: Mainnet, Base, Arbitrum, Optimism, **Celo**, Polygon, and 15+ chain
 
 1. **START**: Read PRD, check Ralph status
 2. **ITERATE**: Build → Test → Record → Next
-3. **SIGNAL**: RALPH_LOOP:CONTINUE after each iteration
-4. **COMPLETE**: RALPH_LOOP:COMPLETED when demo ready
-5. **BLOCKED**: RALPH_LOOP:BLOCKED if human input needed
+3. **COMMIT**: After each day's tasks, commit and push to GitHub
+4. **SIGNAL**: RALPH_LOOP:CONTINUE after each iteration
+5. **COMPLETE**: RALPH_LOOP:COMPLETED when demo ready
+6. **BLOCKED**: RALPH_LOOP:BLOCKED if human input needed
 
 ---
 
-**NOW BEGIN BUILDING. Start with Day 1 tasks. Signal RALPH_LOOP:CONTINUE after each iteration.**
+**NOW BEGIN BUILDING. Start with Day 1 tasks. Commit and push at end of each day. Signal RALPH_LOOP:CONTINUE after each iteration.**
