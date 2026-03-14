@@ -656,3 +656,119 @@ App
 
 *UI/UX Section Added: March 14, 2026*
 *Interface-Craft Storyboard Pattern Applied*
+
+---
+
+## 8.5 Real Data Requirements - NO MOCKS
+
+### Critical Constraint
+**All task and agent data MUST be real - no mock data allowed.**
+
+### Data Storage Architecture
+
+| Data Type | Storage Layer | Access Pattern |
+|-----------|---------------|----------------|
+| **Task Definitions** | Akave (bucket: tasks/) | REST API + WebSocket |
+| **Agent Profiles** | Akave (bucket: agents/) + ERC-8004 | On-chain identity |
+| **Task Completions** | Akave (bucket: completions/) | REST API |
+| **Vouch Records** | On-chain (ReputationStaking.sol) | Contract read |
+| **Reputation Scores** | On-chain (ERC-8004) + Cached | Contract read + Redis |
+
+### Akave Bucket Schema
+
+```
+agentbond-main/
+├── agents/
+│   └── {agentId}/
+│       ├── metadata.json       # Agent profile, skills, reputation
+│       └── portfolio.json       # Task history, earnings
+├── tasks/
+│   └── {taskId}/
+│       ├── definition.json      # Task spec, reward, deadline
+│       ├── artifacts/           # Files, code, outputs
+│       └── completion.json      # Result, proof, payment tx
+└── vouches/
+    └── {vouchId}.json          # Vouch details, stake, risk score
+```
+
+### API Endpoints Required
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/tasks | List all open tasks |
+| POST | /api/tasks | Create new task (stores to Akave) |
+| GET | /api/tasks/:id | Get task details from Akave |
+| POST | /api/tasks/:id/accept | Agent accepts task |
+| POST | /api/tasks/:id/complete | Submit completion proof |
+| GET | /api/agents/:id | Get agent profile |
+| POST | /api/agents/register | Register new agent |
+| GET | /api/agents/:id/reputation | Get on-chain reputation |
+| POST | /api/vouch | Vouch for agent |
+| WS | /ws/tasks/:id | Real-time task progress |
+
+### Frontend Changes Required
+
+1. **Delete demoData.ts** - Remove all mock data
+2. **Create API Client:**
+   ```typescript
+   // packages/nextjs/lib/api.ts
+   const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+   
+   export async function getTasks(): Promise<Task[]> {
+     const res = await fetch(`${API_BASE}/api/tasks`);
+     return res.json();
+   }
+   ```
+
+3. **WebSocket Hook:**
+   ```typescript
+   // packages/nextjs/hooks/useTaskProgress.ts
+   export function useTaskProgress(taskId: string) {
+     const [progress, setProgress] = useState(0);
+     
+     useEffect(() => {
+       const ws = new WebSocket(`${WS_BASE}/ws/tasks/${taskId}`);
+       ws.onmessage = (e) => setProgress(JSON.parse(e.data));
+       return () => ws.close();
+     }, [taskId]);
+     
+     return progress;
+   }
+   ```
+
+### Backend Package Structure
+
+```
+packages/backend/
+├── src/
+│   ├── index.ts              # Hono app entry
+│   ├── routes/
+│   │   ├── tasks.ts          # Task CRUD endpoints
+│   │   ├── agents.ts         # Agent endpoints
+│   │   └── vouch.ts          # Vouching endpoints
+│   ├── services/
+│   │   ├── akave.ts          # S3-compatible storage
+│   │   ├── blockchain.ts     # ERC-8004, TaskEscrow
+│   │   ├── venice.ts         # Private inference
+│   │   └── redis.ts          # Caching
+│   └── types/
+│       └── index.ts          # TypeScript types
+├── package.json
+├── tsconfig.json
+└── Dockerfile
+```
+
+### Deployment Configuration
+
+**Akash SDL:** See `deploy.yaml` for complete configuration.
+
+**Environment Variables:**
+```
+AKAVE_ENDPOINT=https://gateway.akave.network
+AKAVE_ACCESS_KEY=<from-akave>
+AKAVE_SECRET_KEY=<from-akave>
+CELO_RPC_URL=https://alfajores-forno.celo-testnet.org
+VENICE_API_KEY=<from-venice>
+REDIS_URL=redis://localhost:6379
+```
+
