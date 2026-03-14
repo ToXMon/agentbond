@@ -1,0 +1,81 @@
+{
+  "name": "@agentbond/agent",
+  "version": "0.1.0",
+  "description": "AgentBond autonomous agent with Venice SDK integration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./llm": {
+      "import": "./dist/llm.js",
+      "types": "./dist/llm.d.ts"
+    },
+    "./memory": {
+      "import": "./dist/memory.js",
+      "types": "./dist/memory.d.ts"
+    },
+    "./agent": {
+      "import": "./dist/agent.js",
+      "types": "./dist/agent.d.ts"
+    },
+    "./tools/vouch": {
+      "import": "./dist/tools/vouch.js",
+      "types": "./dist/tools/vouch.d.ts"
+    },
+    "./tools/assessRisk": {
+      "import": "./dist/tools/assessRisk.js",
+      "types": "./dist/tools/assessRisk.d.ts"
+    },
+    "./tools/payment": {
+      "import": "./dist/tools/payment.js",
+      "types": "./dist/tools/payment.d.ts"
+    },
+    "./tools/executeTask": {
+      "import": "./dist/tools/executeTask.js",
+      "types": "./dist/tools/executeTask.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --experimental-specifier-resolution=node dist/test.js",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@venice-dev-tools/core": "^2026.3.12",
+    "viem": "^2.21.52",
+    "lowdb": "^7.0.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "@types/node": "^22.13.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "agent",
+    "ai",
+    "venice",
+    "celo",
+    "blockchain",
+    "reputation",
+    "autonomous"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ToXMon/agentbond.git",
+    "directory": "packages/agent"
+  }
+}
