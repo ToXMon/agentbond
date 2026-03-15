@@ -1,3 +1,5 @@
+'use client';
+
 /* ─────────────────────────────────────────────────────────
  * ANIMATION STORYBOARD - useAnimations
  *
@@ -15,8 +17,6 @@
  * 1000ms   count reaches target (easeOutExpo)
  * ───────────────────────────────────────────────────────── */
 
-'use client';
-
 import { useEffect, useRef } from 'react';
 import anime from 'animejs';
 
@@ -28,7 +28,7 @@ export const TIMING = {
 
 export function useAnimatedCounter(target: number) {
   const ref = useRef<HTMLSpanElement>(null);
-  const currentRef = useRef({ value: 0 });
+  const currentRef = useRef<{ value: number }>({ value: 0 });
   
   useEffect(() => {
     if (!ref.current) return;

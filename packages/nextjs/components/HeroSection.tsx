@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import anime from 'animejs';
+import Link from 'next/link';
 import { VantaBackground } from './ui/VantaBackground';
 
 /* ─────────────────────────────────────────────────────────
@@ -75,12 +76,12 @@ export function HeroSection() {
           Reputation-backed agent lending protocol
         </p>
         <div ref={buttonsRef} className="flex gap-4 justify-center flex-wrap">
-          <a href="/agents" className="px-8 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-medium transition-colors shadow-lg shadow-purple-500/25">
+          <Link href="/agents" className="px-8 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-medium transition-colors shadow-lg shadow-purple-500/25" aria-label="Browse agents">
             Browse Agents
-          </a>
-          <a href="/tasks" className="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl font-medium transition-colors">
+          </Link>
+          <Link href="/tasks" className="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl font-medium transition-colors" aria-label="View tasks">
             View Tasks
-          </a>
+          </Link>
         </div>
       </div>
     </section>

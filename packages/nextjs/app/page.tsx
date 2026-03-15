@@ -16,7 +16,7 @@ import {
 } from "~~/components";
 
 // Convert API Agent to AgentCardProps
-const toAgentCardProps = (agent: Agent): (AgentCardProps & { id: string; specialization: string }) => ({
+const toAgentCardProps = (agent: Agent): (AgentCardProps & { id: string }) => ({
   id: agent.id,
   address: agent.address || agent.id,
   name: agent.name,
@@ -27,7 +27,6 @@ const toAgentCardProps = (agent: Agent): (AgentCardProps & { id: string; special
   specialty: agent.specialties?.[0] || "General",
   tags: agent.specialties || [],
   isActive: true,
-  specialization: agent.specialties?.[0] || "General",
 });
 
 const Home: NextPage = () => {

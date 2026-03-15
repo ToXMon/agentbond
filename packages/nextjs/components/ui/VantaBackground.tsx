@@ -1,20 +1,18 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import VANTA from 'vanta/dist/vanta.net.min';
+
+type VantaEffect = { destroy: () => void };
 
 export function VantaBackground() {
   const vantaRef = useRef<HTMLDivElement>(null);
-  const effectRef = useRef<any>(null);
+  const effectRef = useRef<VantaEffect | null>(null);
   
   useEffect(() => {
     if (!vantaRef.current || effectRef.current) return;
     
-    Promise.all([
-      import('vanta/dist/vanta.net.min'),
-      import('three')
-    ]).then(([vantaModule, threeModule]) => {
-      const VANTA = (vantaModule as any).default;
+    import('three').then(threeModule => {
       const THREE = threeModule;
       
       effectRef.current = VANTA({
@@ -30,6 +28,8 @@ export function VantaBackground() {
         maxDistance: 20,
         spacing: 18,
       });
+    }).catch(error => {
+      console.error('Failed to initialize Vanta background:', error);
     });
     
     return () => {
