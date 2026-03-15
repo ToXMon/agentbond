@@ -234,12 +234,12 @@ export function TaskExecutionPanel({
       {/* Execution Stages */}
       <div className="space-y-4 mb-6">
         {STAGES.items.map((stage, index) => {
-          const stageState = stages.find((s) => s.id === stage.id)!;
-          return (
-            <motion.div
-n              key={stage.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+            const stageState = stages.find((s) => s.id === stage.id)!;
+            return (
+              <motion.div
+                key={stage.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
               transition={{ delay: TIMING.stage1Start / 1000 + index * STAGES.stagger }}
               className="relative"
             >

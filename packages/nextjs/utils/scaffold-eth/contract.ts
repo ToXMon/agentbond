@@ -79,7 +79,7 @@ export type GenericContractsDeclaration = {
   };
 };
 
-export const contracts = contractsData as GenericContractsDeclaration | null;
+export const contracts = contractsData as unknown as GenericContractsDeclaration | null;
 
 type ConfiguredChainId = (typeof scaffoldConfig)["targetNetworks"][0]["id"];
 

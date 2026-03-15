@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { api } from '../lib/api';
 
-interface TaskSubmissionFormProps {
+export interface TaskSubmissionFormProps {
   onSubmit: (task: any) => void;
   onClose: () => void;
 }
