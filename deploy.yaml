@@ -1,0 +1,40 @@
+version: "2.0"
+
+services:
+  backend:
+    image: ghcr.io/toxmon/agentbond-backend:v1.0.0
+    expose:
+      - port: 3001
+        as: 80
+        to:
+          - global: true
+    env:
+      - PORT=3001
+      - CELO_RPC_URL=https://alfajores-forno.celo-testnet.org
+      - AKAVE_ENDPOINT=https://gateway.akave.network
+      - VENICE_API_KEY=$VENICE_API_KEY
+      - AKAVE_ACCESS_KEY=$AKAVE_ACCESS_KEY
+      - AKAVE_SECRET_KEY=$AKAVE_SECRET_KEY
+
+profiles:
+  compute:
+    backend:
+      resources:
+        cpu:
+          units: 1
+        memory:
+          size: 1Gi
+        storage:
+          size: 5Gi
+  placement:
+    dcloud:
+      pricing:
+        backend:
+          denom: uakt
+          amount: 5000
+
+deployment:
+  backend:
+    dcloud:
+      profile: backend
+      count: 1

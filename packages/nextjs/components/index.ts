@@ -5,3 +5,4 @@ export { AgentCard, type AgentCardProps } from "./AgentCard";
 export { TaskExecutionPanel, type TaskExecutionPanelProps } from "./TaskExecutionPanel";
 export { CompletionCelebration, type CompletionCelebrationProps } from "./CompletionCelebration";
 export { VouchingDrawer, type VouchingDrawerProps } from "./VouchingDrawer";
+export { TaskSubmissionForm, type TaskSubmissionFormProps } from "./TaskSubmissionForm";
