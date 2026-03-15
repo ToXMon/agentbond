@@ -1,20 +1,78 @@
+# AgentBond Backend - Akash Deployment
+# Version: 1.0.0
+# Target: Celo Alfajores Testnet + Akave O3 Storage
+# Synthesis Hackathon 2026
+
 version: "2.0"
 
 services:
   backend:
-    image: ghcr.io/toxmon/agentbond-backend:v1.0.0
+    image: oven/bun:1.2-alpine
+    
+    command:
+      - sh
+      - -c
+      - |
+        apk add --no-cache curl
+        cd /app
+        bun install
+        bun run src/index.ts
+    
     expose:
       - port: 3001
         as: 80
         to:
           - global: true
-    env:
+        proto: tcp
+        http_options:
+          max_body_size: 10485760
+          read_timeout: 60000
+          send_timeout: 60000
+          next_tries: 3
+          next_cases:
+            - error
+            - timeout
+            - "500"
+            - "502"
+            - "503"
+    
+    env:\n      # Application Settings
       - PORT=3001
+      - NODE_ENV=production
+      - DATA_DIR=/app/data
+      - LOG_LEVEL=info
+      
+      # Celo Blockchain Configuration
       - CELO_RPC_URL=https://alfajores-forno.celo-testnet.org
-      - AKAVE_ENDPOINT=https://gateway.akave.network
-      - VENICE_API_KEY=$VENICE_API_KEY
-      - AKAVE_ACCESS_KEY=$AKAVE_ACCESS_KEY
-      - AKAVE_SECRET_KEY=$AKAVE_SECRET_KEY
+      - CHAIN_ID=44787
+      
+      # ERC-8004 Contract Addresses (Celo Alfajores)
+      - IDENTITY_REGISTRY=0x8004A169FB4a3325136EB29fA0ceB6D2e539a432
+      - REPUTATION_REGISTRY=0x8004BAa17C55a88189AE136b182e5fdA19dE9b63
+      
+      # Akave Storage (replace with actual values)
+      - AKAVE_ENDPOINT=YOUR_AKAVE_ENDPOINT_URL
+      - AKAVE_BUCKET=agentbond-main
+      
+      # CORS Configuration
+      - CORS_ORIGINS=https://agentbond.vercel.app,http://localhost:3000
+    
+    params:
+      storage:
+        data:
+          mount: /app/data
+          readOnly: false
+    
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:3001/health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 profiles:
   compute:
@@ -25,9 +83,18 @@ profiles:
         memory:
           size: 1Gi
         storage:
-          size: 5Gi
+          - name: default
+            size: 1Gi
+          - name: data
+            size: 5Gi
+            attributes:
+              persistent: true
+              class: beta2
+
   placement:
-    dcloud:
+    akash:
+      attributes:
+        host: akash
       pricing:
         backend:
           denom: uakt
@@ -35,6 +102,6 @@ profiles:
 
 deployment:
   backend:
-    dcloud:
+    akash:
       profile: backend
       count: 1

@@ -1,0 +1,15 @@
+[
+  {
+    "id": "task_SewkmvxjpSr1",
+    "title": "Test Task",
+    "description": "Testing database integration",
+    "reward": "1.5",
+    "rewardWei": "1500000000000000000",
+    "status": "open",
+    "creator": "0x1234567890123456789012345678901234567890",
+    "tags": [],
+    "attachments": [],
+    "createdAt": "2026-03-15T01:20:04.870Z",
+    "updatedAt": "2026-03-15T01:20:04.870Z"
+  }
+]
