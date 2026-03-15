@@ -85,7 +85,7 @@ export function CompletionCelebration({
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {particles.map((particle) => (
               <motion.div
-n                key={particle.id}
+                key={particle.id}
                 initial={{
                   x: `calc(${particle.x}vw)`,
                   y: `calc(${particle.y}vh)`,
@@ -121,7 +121,7 @@ n                key={particle.id}
           >
             {/* "TASK COMPLETE" Text */}
             <motion.div
-n              initial={{ scale: 0, opacity: 0 }}
+              initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{
                 ...CELEBRATION.spring,

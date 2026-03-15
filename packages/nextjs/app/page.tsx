@@ -6,17 +6,17 @@ import { useAccount } from "wagmi";
 import { Address } from "@scaffold-ui/components";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth";
 import { api, type Agent, type Task } from "~~/lib/api";
+import { AgentCardEnhanced, type AgentCardProps } from "../components/AgentCardEnhanced";
+import { HeroSection } from "../components/HeroSection";
 import {
-  AgentCard,
   TaskExecutionPanel,
   CompletionCelebration,
   VouchingDrawer,
   TaskSubmissionForm,
-  type AgentCardProps,
 } from "~~/components";
 
 // Convert API Agent to AgentCardProps
-const toAgentCardProps = (agent: Agent): (AgentCardProps & { id: string; specialization: string }) => ({
+const toAgentCardProps = (agent: Agent): (AgentCardProps & { id: string }) => ({
   id: agent.id,
   address: agent.address || agent.id,
   name: agent.name,
@@ -24,7 +24,9 @@ const toAgentCardProps = (agent: Agent): (AgentCardProps & { id: string; special
   isVouched: agent.totalVouches > 0,
   status: "online",
   tasksCompleted: agent.completedTasks,
-  specialization: agent.specialties?.[0] || "General",
+  specialty: agent.specialties?.[0] || "General",
+  tags: agent.specialties || [],
+  isActive: true,
 });
 
 const Home: NextPage = () => {
@@ -188,6 +190,7 @@ const Home: NextPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
+      <HeroSection />
       {/* Header */}
       <div className="bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-base-300">
         <div className="max-w-7xl mx-auto px-4 py-6">
@@ -257,7 +260,7 @@ const Home: NextPage = () => {
                   const cardProps = toAgentCardProps(agent);
                   return (
                     <div key={agent.id} className="relative">
-                      <AgentCard
+                      <AgentCardEnhanced
                         {...cardProps}
                         onSelect={() => handleAgentSelect(cardProps)}
                       />
