@@ -57,29 +57,48 @@ export function HeroSection() {
   }, []);
   
   return (
-    <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[65vh] flex items-center justify-center overflow-hidden deepspace-bg">
+      {/* Subtle grid overlay */}
+      <div className="absolute inset-0 grid-overlay pointer-events-none" />
       <VantaBackground />
-      
-      <div className="relative z-10 text-center px-4">
-        <h1 
+
+      {/* Glass visual anchor */}
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(139,92,246,0.12) 0%, transparent 70%)',
+          filter: 'blur(40px)',
+        }}
+      />
+
+      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <h1
           ref={titleRef}
-          className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-6"
+          className="text-5xl md:text-7xl font-black tracking-tight mb-6 text-shimmer"
           style={{ opacity: 0 }}
         >
           AgentBond
         </h1>
-        <p 
+        <p
           ref={subtitleRef}
-          className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto mb-8"
+          className="text-xl md:text-2xl text-slate-400 tracking-wide max-w-2xl mx-auto mb-10"
           style={{ opacity: 0 }}
         >
           Reputation-backed agent lending protocol
         </p>
         <div ref={buttonsRef} className="flex gap-4 justify-center flex-wrap">
-          <Link href="/agents" className="px-8 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-medium transition-colors shadow-lg shadow-purple-500/25" aria-label="Browse agents">
+          <Link
+            href="/agents"
+            className="btn-glow px-8 py-3 inline-block"
+            aria-label="Browse agents"
+          >
             Browse Agents
           </Link>
-          <Link href="/tasks" className="px-8 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl font-medium transition-colors" aria-label="View tasks">
+          <Link
+            href="/tasks"
+            className="btn-ghost-space px-8 py-3 inline-block"
+            aria-label="View tasks"
+          >
             View Tasks
           </Link>
         </div>
