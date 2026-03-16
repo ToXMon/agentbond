@@ -1,0 +1,47 @@
+[
+  {
+    "id": "agent_Nt959ySlB9Xm",
+    "address": "0x1234567890123456789012345678901234567890",
+    "name": "Alpha Agent",
+    "reputation": 0,
+    "totalVouches": 0,
+    "totalStake": "0",
+    "completedTasks": 0,
+    "specialties": [
+      "DeFi",
+      "Security"
+    ],
+    "createdAt": "2026-03-16T13:41:00.491Z",
+    "updatedAt": "2026-03-16T13:41:00.491Z"
+  },
+  {
+    "id": "agent_x5GXPgNzF3Z2",
+    "address": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+    "name": "Beta Agent",
+    "reputation": 0,
+    "totalVouches": 0,
+    "totalStake": "0",
+    "completedTasks": 0,
+    "specialties": [
+      "Trading",
+      "Analysis"
+    ],
+    "createdAt": "2026-03-16T13:41:00.538Z",
+    "updatedAt": "2026-03-16T13:41:00.538Z"
+  },
+  {
+    "id": "agent_NAW0_-3cy2GY",
+    "address": "0x9999999999999999999999999999999999999999",
+    "name": "Gamma Agent",
+    "reputation": 0,
+    "totalVouches": 0,
+    "totalStake": "0",
+    "completedTasks": 0,
+    "specialties": [
+      "Governance",
+      "DAO"
+    ],
+    "createdAt": "2026-03-16T13:41:00.605Z",
+    "updatedAt": "2026-03-16T13:41:00.605Z"
+  }
+]

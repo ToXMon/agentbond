@@ -163,10 +163,10 @@ const Home: NextPage = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-base-100 flex items-center justify-center">
+      <div className="deepspace-bg grid-overlay min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
-          <p className="mt-4 text-base-content/60">Loading AgentBond...</p>
+          <div className="w-16 h-16 border-2 border-purple-500/30 border-t-purple-400 rounded-full animate-spin mx-auto" />
+          <p className="mt-4 text-slate-400">Loading AgentBond...</p>
         </div>
       </div>
     );
@@ -175,12 +175,12 @@ const Home: NextPage = () => {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-base-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-error text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold mb-2">Connection Error</h2>
-          <p className="text-base-content/60 mb-4">{error}</p>
-          <button onClick={loadData} className="btn btn-primary">
+      <div className="deepspace-bg grid-overlay min-h-screen flex items-center justify-center">
+        <div className="glass-card p-8 text-center max-w-md mx-4">
+          <div className="text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold mb-2 text-white">Connection Error</h2>
+          <p className="text-slate-400 mb-4">{error}</p>
+          <button onClick={loadData} className="btn-glow px-6 py-2 rounded-xl text-white font-medium">
             Retry
           </button>
         </div>
@@ -189,26 +189,32 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="deepspace-bg grid-overlay relative">
+      {/* Full-page Vanta background layer */}
+      <div className="fixed inset-0 -z-10 pointer-events-none">
+        <div className="absolute inset-0 opacity-20" id="vanta-page-bg" />
+      </div>
+
       <HeroSection />
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-base-300">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+
+      {/* Dashboard Header */}
+      <div className="border-b border-slate-700/50 bg-slate-900/60 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 py-5">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-base-content">AgentBond</h1>
-              <p className="text-base-content/60">Decentralized Agent Reputation Network</p>
+              <h1 className="text-2xl font-bold text-shimmer">AgentBond</h1>
+              <p className="text-slate-400 text-sm m-0">Decentralized Agent Reputation Network</p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowTaskForm(true)}
-                className="btn btn-primary btn-sm"
+                className="btn-glow px-4 py-2 rounded-xl text-white text-sm font-medium"
               >
                 + Create Task
               </button>
               {connectedAddress && (
                 <div className="text-right">
-                  <p className="text-sm text-base-content/60">Connected</p>
+                  <p className="text-xs text-slate-400 m-0">Connected</p>
                   <Address address={connectedAddress} chain={targetNetwork} />
                 </div>
               )}
@@ -220,23 +226,21 @@ const Home: NextPage = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-base-200 rounded-xl p-4 text-center hover:bg-base-300 transition-colors">
-            <p className="text-2xl font-bold text-primary">{agents.length}</p>
-            <p className="text-sm text-base-content/60">Total Agents</p>
-          </div>
-          <div className="bg-base-200 rounded-xl p-4 text-center hover:bg-base-300 transition-colors">
-            <p className="text-2xl font-bold text-success">{totalTasksCompleted.toLocaleString()}</p>
-            <p className="text-sm text-base-content/60">Tasks Completed</p>
-          </div>
-          <div className="bg-base-200 rounded-xl p-4 text-center hover:bg-base-300 transition-colors">
-            <p className="text-2xl font-bold text-secondary">{openTasks}</p>
-            <p className="text-sm text-base-content/60">Open Tasks</p>
-          </div>
-          <div className="bg-base-200 rounded-xl p-4 text-center hover:bg-base-300 transition-colors">
-            <p className="text-2xl font-bold text-warning">{completedTasksCount}</p>
-            <p className="text-sm text-base-content/60">Completed</p>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[
+            { value: agents.length, label: "Total Agents", color: "text-purple-400" },
+            { value: totalTasksCompleted, label: "Tasks Completed", color: "text-green-400" },
+            { value: openTasks, label: "Open Tasks", color: "text-blue-400" },
+            { value: completedTasksCount, label: "Completed", color: "text-pink-400" },
+          ].map(({ value, label, color }) => (
+            <div
+              key={label}
+              className="glass-card p-4 text-center transition-all duration-300"
+            >
+              <p className={`text-2xl font-bold ${color}`}>{value}</p>
+              <p className="text-xs text-slate-400 m-0">{label}</p>
+            </div>
+          ))}
         </div>
 
         {/* Main Grid */}
@@ -244,15 +248,15 @@ const Home: NextPage = () => {
           {/* Agent Grid */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-base-content">Agent Network</h2>
-              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+              <h2 className="text-lg font-bold text-white">Agent Network</h2>
+              <span className="text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-1 rounded-full">
                 {agents.length} Registered
               </span>
             </div>
             {agents.length === 0 ? (
-              <div className="bg-base-200 rounded-xl p-8 text-center">
-                <p className="text-base-content/60">No agents registered yet.</p>
-                <p className="text-sm text-base-content/40 mt-2">Register an agent via the API to get started!</p>
+              <div className="glass-card p-8 text-center">
+                <p className="text-slate-400">No agents registered yet.</p>
+                <p className="text-sm text-slate-500 mt-2">Register an agent via the API to get started!</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -270,12 +274,12 @@ const Home: NextPage = () => {
                             e.stopPropagation();
                             handleVouch(cardProps);
                           }}
-                          className="absolute bottom-2 right-2 bg-secondary text-secondary-content text-xs px-3 py-1.5 rounded-full hover:bg-secondary/80 transition-colors shadow-lg"
+                          className="absolute bottom-3 right-3 btn-ghost-space text-slate-300 text-xs px-3 py-1.5 rounded-full shadow-lg"
                         >
                           Vouch
                         </button>
                       )}
-                      <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-success" />
+                      <div className="absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
                     </div>
                   );
                 })}
@@ -288,17 +292,17 @@ const Home: NextPage = () => {
             {showTaskPanel && selectedAgent ? (
               <div className="space-y-4">
                 {/* Selected Agent Info */}
-                <div className="bg-base-200 rounded-xl p-4">
-                  <h3 className="font-bold text-base-content mb-2">Selected Agent</h3>
+                <div className="glass-card p-4">
+                  <h3 className="font-bold text-white mb-3">Selected Agent</h3>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                      <span className="text-lg font-bold text-primary">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/25">
+                      <span className="text-lg font-bold text-white">
                         {selectedAgent.name.charAt(0)}
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium text-base-content">{selectedAgent.name}</p>
-                      <p className="text-sm text-success">
+                      <p className="font-medium text-white">{selectedAgent.name}</p>
+                      <p className="text-sm text-green-400">
                         Rep: {selectedAgent.reputation}
                       </p>
                     </div>
@@ -307,14 +311,14 @@ const Home: NextPage = () => {
 
                 {/* Task Selection */}
                 {!selectedTask && !isExecuting && (
-                  <div className="bg-base-200 rounded-xl p-4">
-                    <h3 className="font-bold text-base-content mb-3">Select a Task</h3>
+                  <div className="glass-card p-4">
+                    <h3 className="font-bold text-white mb-3">Select a Task</h3>
                     {tasks.filter(t => t.status === 'open').length === 0 ? (
                       <div className="text-center py-4">
-                        <p className="text-base-content/60">No open tasks available.</p>
+                        <p className="text-slate-400">No open tasks available.</p>
                         <button
                           onClick={() => setShowTaskForm(true)}
-                          className="btn btn-sm btn-primary mt-2"
+                          className="btn-glow px-4 py-1.5 rounded-lg text-white text-sm mt-2"
                         >
                           Create a Task
                         </button>
@@ -325,15 +329,15 @@ const Home: NextPage = () => {
                           <button
                             key={task.id}
                             onClick={() => handleTaskSelect(task)}
-                            className="w-full text-left p-3 bg-base-100 rounded-lg hover:bg-base-300 transition-colors"
+                            className="w-full text-left p-3 bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700/50 hover:border-purple-500/40 rounded-xl transition-all duration-200"
                           >
                             <div className="flex justify-between items-start">
                               <div>
-                                <p className="font-medium text-base-content">{task.title}</p>
-                                <p className="text-xs text-base-content/60 truncate">{task.description}</p>
+                                <p className="font-medium text-white text-sm">{task.title}</p>
+                                <p className="text-xs text-slate-400 truncate">{task.description}</p>
                               </div>
                             </div>
-                            <p className="text-sm font-medium text-primary mt-1">{task.reward} CELO</p>
+                            <p className="text-sm font-medium text-purple-400 mt-1">{task.reward} CELO</p>
                           </button>
                         ))}
                       </div>
@@ -360,7 +364,7 @@ const Home: NextPage = () => {
                           setTaskComplete(false);
                           setIsExecuting(false);
                         }}
-                        className="w-full btn btn-outline btn-primary"
+                        className="w-full btn-ghost-space text-slate-300 py-2 px-4 rounded-xl font-medium"
                       >
                         Run Another Task
                       </button>
@@ -370,10 +374,10 @@ const Home: NextPage = () => {
               </div>
             ) : (
               /* Placeholder when no agent selected */
-              <div className="bg-base-200 rounded-xl p-6 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-base-300 flex items-center justify-center">
+              <div className="glass-card p-6 text-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-700/60 flex items-center justify-center">
                   <svg
-                    className="w-8 h-8 text-base-content/40"
+                    className="w-8 h-8 text-slate-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -386,8 +390,8 @@ const Home: NextPage = () => {
                     />
                   </svg>
                 </div>
-                <h3 className="font-bold text-base-content mb-2">Select an Agent</h3>
-                <p className="text-sm text-base-content/60">
+                <h3 className="font-bold text-white mb-2">Select an Agent</h3>
+                <p className="text-sm text-slate-400">
                   Click on any agent card to start a task
                 </p>
               </div>
@@ -397,13 +401,13 @@ const Home: NextPage = () => {
 
         {/* Tasks Section */}
         <div className="mt-8">
-          <h2 className="text-xl font-bold text-base-content mb-4">All Tasks</h2>
+          <h2 className="text-lg font-bold text-white mb-4">All Tasks</h2>
           {tasks.length === 0 ? (
-            <div className="bg-base-200 rounded-xl p-8 text-center">
-              <p className="text-base-content/60">No tasks yet.</p>
+            <div className="glass-card p-8 text-center">
+              <p className="text-slate-400">No tasks yet.</p>
               <button
                 onClick={() => setShowTaskForm(true)}
-                className="btn btn-primary mt-4"
+                className="btn-glow px-6 py-2 rounded-xl text-white font-medium mt-4"
               >
                 Create Your First Task
               </button>
@@ -411,18 +415,23 @@ const Home: NextPage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {tasks.map((task) => (
-                <div key={task.id} className="card bg-base-200">
-                  <div className="card-body">
-                    <h3 className="card-title">{task.title}</h3>
-                    <p className="text-sm text-base-content/60 line-clamp-2">{task.description}</p>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="badge badge-primary">{task.reward} CELO</span>
-                      <span className={`badge ${
-                        task.status === 'open' ? 'badge-success' :
-                        task.status === 'completed' ? 'badge-info' :
-                        'badge-warning'
-                      }`}>{task.status}</span>
-                    </div>
+                <div
+                  key={task.id}
+                  className="glass-card p-5 transition-all duration-300 hover:scale-[1.01]"
+                >
+                  <h3 className="font-semibold text-white mb-1">{task.title}</h3>
+                  <p className="text-sm text-slate-400 line-clamp-2">{task.description}</p>
+                  <div className="flex justify-between items-center mt-3">
+                    <span className="text-sm font-semibold text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2.5 py-0.5 rounded-full">
+                      {task.reward} CELO
+                    </span>
+                    <span className={`text-xs px-2.5 py-0.5 rounded-full border font-medium ${
+                      task.status === 'open'
+                        ? 'text-green-400 bg-green-500/10 border-green-500/25'
+                        : task.status === 'completed'
+                        ? 'text-blue-400 bg-blue-500/10 border-blue-500/25'
+                        : 'text-yellow-400 bg-yellow-500/10 border-yellow-500/25'
+                    }`}>{task.status}</span>
                   </div>
                 </div>
               ))}

@@ -26,16 +26,26 @@ export interface Agent {
   createdAt: string;
 }
 
+type ApiResponse<T> = { success: boolean; data: T; error?: string };
+
+const unwrap = async <T>(res: Response): Promise<T> => {
+  const json: ApiResponse<T> | T = await res.json();
+  if (json && typeof json === 'object' && 'success' in json && 'data' in json) {
+    return (json as ApiResponse<T>).data;
+  }
+  return json as T;
+};
+
 export const api = {
   // Tasks
   getTasks: async (): Promise<{ tasks: Task[] }> => {
     const res = await fetch(`${API_BASE}/api/tasks`);
-    return res.json();
+    return unwrap(res);
   },
   
   getTask: async (id: string): Promise<{ task: Task }> => {
     const res = await fetch(`${API_BASE}/api/tasks/${id}`);
-    return res.json();
+    return unwrap(res);
   },
   
   createTask: async (task: Partial<Task>): Promise<{ task: Task; message: string }> => {
@@ -44,7 +54,7 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(task),
     });
-    return res.json();
+    return unwrap(res);
   },
   
   assignTask: async (taskId: string, agentId: string): Promise<{ task: Task; message: string }> => {
@@ -53,7 +63,7 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ agentId }),
     });
-    return res.json();
+    return unwrap(res);
   },
   
   completeTask: async (taskId: string, result: string): Promise<{ task: Task; message: string }> => {
@@ -62,18 +72,18 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ result }),
     });
-    return res.json();
+    return unwrap(res);
   },
 
   // Agents
   getAgents: async (): Promise<{ agents: Agent[] }> => {
     const res = await fetch(`${API_BASE}/api/agents`);
-    return res.json();
+    return unwrap(res);
   },
   
   getAgent: async (id: string): Promise<{ agent: Agent }> => {
     const res = await fetch(`${API_BASE}/api/agents/${id}`);
-    return res.json();
+    return unwrap(res);
   },
   
   registerAgent: async (agent: Partial<Agent>): Promise<{ agent: Agent; message: string }> => {
@@ -82,7 +92,7 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(agent),
     });
-    return res.json();
+    return unwrap(res);
   },
   
   vouchForAgent: async (agentId: string, data: { staker: string; amount: string; reason: string }): Promise<any> => {
@@ -91,7 +101,7 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    return res.json();
+    return unwrap(res);
   },
 
   // Health
