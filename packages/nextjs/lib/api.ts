@@ -30,12 +30,15 @@ export const api = {
   // Tasks
   getTasks: async (): Promise<{ tasks: Task[] }> => {
     const res = await fetch(`${API_BASE}/api/tasks`);
-    return res.json();
+    const json = await res.json();
+    // Backend wraps response in { success, data: { tasks } }
+    return json.data ?? json;
   },
   
   getTask: async (id: string): Promise<{ task: Task }> => {
     const res = await fetch(`${API_BASE}/api/tasks/${id}`);
-    return res.json();
+    const json = await res.json();
+    return json.data ?? json;
   },
   
   createTask: async (task: Partial<Task>): Promise<{ task: Task; message: string }> => {
@@ -68,12 +71,15 @@ export const api = {
   // Agents
   getAgents: async (): Promise<{ agents: Agent[] }> => {
     const res = await fetch(`${API_BASE}/api/agents`);
-    return res.json();
+    const json = await res.json();
+    // Backend wraps response in { success, data: { agents } }
+    return json.data ?? json;
   },
   
   getAgent: async (id: string): Promise<{ agent: Agent }> => {
     const res = await fetch(`${API_BASE}/api/agents/${id}`);
-    return res.json();
+    const json = await res.json();
+    return json.data ?? json;
   },
   
   registerAgent: async (agent: Partial<Agent>): Promise<{ agent: Agent; message: string }> => {

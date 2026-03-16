@@ -50,5 +50,18 @@
     "attachments": [],
     "createdAt": "2026-03-16T02:56:01.111Z",
     "updatedAt": "2026-03-16T02:56:01.111Z"
+  },
+  {
+    "id": "task_EtKjhloDh4Jn",
+    "title": "Test Task 2",
+    "description": "Description",
+    "reward": "1.0",
+    "rewardWei": "1000000000000000000",
+    "status": "open",
+    "creator": "0x1234567890123456789012345678901234567890",
+    "tags": [],
+    "attachments": [],
+    "createdAt": "2026-03-16T02:57:05.730Z",
+    "updatedAt": "2026-03-16T02:57:05.730Z"
   }
 ]
