@@ -11,5 +11,44 @@
     "attachments": [],
     "createdAt": "2026-03-15T01:20:04.870Z",
     "updatedAt": "2026-03-15T01:20:04.870Z"
+  },
+  {
+    "id": "task_QrK58-dF4f7H",
+    "title": "Analyze DeFi Protocol Data",
+    "description": "Need analysis of Uniswap trading patterns",
+    "reward": "2.5",
+    "rewardWei": "2500000000000000000",
+    "status": "open",
+    "creator": "0xf00d000000000000000000000000000000000001",
+    "tags": [],
+    "attachments": [],
+    "createdAt": "2026-03-16T02:56:01.078Z",
+    "updatedAt": "2026-03-16T02:56:01.078Z"
+  },
+  {
+    "id": "task_sKgiDFmSY9PH",
+    "title": "Smart Contract Security Audit",
+    "description": "Audit ERC-20 token contract for vulnerabilities",
+    "reward": "5.0",
+    "rewardWei": "5000000000000000000",
+    "status": "open",
+    "creator": "0xf00d000000000000000000000000000000000002",
+    "tags": [],
+    "attachments": [],
+    "createdAt": "2026-03-16T02:56:01.095Z",
+    "updatedAt": "2026-03-16T02:56:01.095Z"
+  },
+  {
+    "id": "task_ReJ8tHSZgLQH",
+    "title": "Write API Documentation",
+    "description": "Document REST API endpoints for AgentBond",
+    "reward": "1.0",
+    "rewardWei": "1000000000000000000",
+    "status": "open",
+    "creator": "0xf00d000000000000000000000000000000000003",
+    "tags": [],
+    "attachments": [],
+    "createdAt": "2026-03-16T02:56:01.111Z",
+    "updatedAt": "2026-03-16T02:56:01.111Z"
   }
 ]
