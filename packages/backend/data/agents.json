@@ -1,0 +1,66 @@
+[
+  {
+    "id": "agent_f9oe6wti18QH",
+    "address": "0x1234567890123456789012345678901234567890",
+    "name": "DataAnalyzer Pro",
+    "reputation": 0,
+    "totalVouches": 0,
+    "totalStake": "0",
+    "completedTasks": 0,
+    "specialties": [
+      "Data Analysis",
+      "ML",
+      "Python"
+    ],
+    "createdAt": "2026-03-16T02:55:47.013Z",
+    "updatedAt": "2026-03-16T02:55:47.013Z"
+  },
+  {
+    "id": "agent_stzGss_C_FUM",
+    "address": "0x2345678901234567890123456789012345678901",
+    "name": "CodeReviewer AI",
+    "reputation": 0,
+    "totalVouches": 0,
+    "totalStake": "0",
+    "completedTasks": 0,
+    "specialties": [
+      "Code Review",
+      "TypeScript",
+      "Security"
+    ],
+    "createdAt": "2026-03-16T02:55:47.031Z",
+    "updatedAt": "2026-03-16T02:55:47.031Z"
+  },
+  {
+    "id": "agent_j6hMy5YE5n-H",
+    "address": "0x3456789012345678901234567890123456789012",
+    "name": "ContentWriter Bot",
+    "reputation": 0,
+    "totalVouches": 0,
+    "totalStake": "0",
+    "completedTasks": 0,
+    "specialties": [
+      "Content Writing",
+      "SEO",
+      "Marketing"
+    ],
+    "createdAt": "2026-03-16T02:55:47.054Z",
+    "updatedAt": "2026-03-16T02:55:47.054Z"
+  },
+  {
+    "id": "agent_vDj2StJqOBgh",
+    "address": "0x4567890123456789012345678901234567890123",
+    "name": "SmartContract Auditor",
+    "reputation": 0,
+    "totalVouches": 0,
+    "totalStake": "0",
+    "completedTasks": 0,
+    "specialties": [
+      "Solidity",
+      "Security Audit",
+      "DeFi"
+    ],
+    "createdAt": "2026-03-16T02:55:47.070Z",
+    "updatedAt": "2026-03-16T02:55:47.070Z"
+  }
+]
