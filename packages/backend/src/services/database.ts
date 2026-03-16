@@ -1,8 +1,17 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { Agent, Task, Vouch, ReputationEvent } from '../types/schema';
+import { akave } from './akave';
 
 const DATA_DIR = process.env.DATA_DIR || './data';
+
+// Akave object key mappings
+const AKAVE_KEYS = {
+  agents: 'agents/all.json',
+  tasks: 'tasks/all.json',
+  vouches: 'vouches/all.json',
+  reputation_events: 'reputation/events.json',
+};
 
 class Database {
   private agents: Map<string, Agent> = new Map();
@@ -15,6 +24,9 @@ class Database {
     if (this.loaded) return;
     
     try {
+      // Initialize Akave first; falls back gracefully if unconfigured
+      await akave.init();
+
       await fs.mkdir(DATA_DIR, { recursive: true });
       await this.load();
       this.loaded = true;
@@ -26,31 +38,53 @@ class Database {
   }
 
   private async load() {
-    const loadFile = async (name: string) => {
+    const loadCollection = async <T>(name: keyof typeof AKAVE_KEYS): Promise<T[]> => {
+      // Prefer Akave when available
+      if (akave.isAvailable()) {
+        try {
+          const data = await akave.getJSON<T[]>(AKAVE_KEYS[name]);
+          if (data) return data;
+        } catch (err) {
+          console.warn(`Akave load failed for ${name}, falling back to local:`, err);
+        }
+      }
+
+      // Fall back to local file storage
       try {
         const content = await fs.readFile(path.join(DATA_DIR, `${name}.json`), 'utf-8');
-        return JSON.parse(content);
+        return JSON.parse(content) as T[];
       } catch {
         return [];
       }
     };
 
     const [agents, tasks, vouches, events] = await Promise.all([
-      loadFile('agents'),
-      loadFile('tasks'),
-      loadFile('vouches'),
-      loadFile('reputation_events'),
+      loadCollection<Agent>('agents'),
+      loadCollection<Task>('tasks'),
+      loadCollection<Vouch>('vouches'),
+      loadCollection<ReputationEvent>('reputation_events'),
     ]);
 
-    agents.forEach((a: Agent) => this.agents.set(a.id, a));
-    tasks.forEach((t: Task) => this.tasks.set(t.id, t));
-    vouches.forEach((v: Vouch) => this.vouches.set(v.id, v));
-    events.forEach((e: ReputationEvent) => this.reputationEvents.set(e.id, e));
+    agents.forEach((a) => this.agents.set(a.id, a));
+    tasks.forEach((t) => this.tasks.set(t.id, t));
+    vouches.forEach((v) => this.vouches.set(v.id, v));
+    events.forEach((e) => this.reputationEvents.set(e.id, e));
     
     console.log(`📊 Loaded: ${this.agents.size} agents, ${this.tasks.size} tasks, ${this.vouches.size} vouches, ${this.reputationEvents.size} events`);
   }
 
-  private async save(name: string, data: any[]) {
+  private async save(name: keyof typeof AKAVE_KEYS, data: any[]) {
+    // Persist to Akave when available
+    if (akave.isAvailable()) {
+      try {
+        await akave.putJSON(AKAVE_KEYS[name], data);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn(`Akave save failed for "${name}" (${message}) — local copy written`);
+      }
+    }
+
+    // Always keep a local copy as backup
     await fs.writeFile(
       path.join(DATA_DIR, `${name}.json`),
       JSON.stringify(data, null, 2)

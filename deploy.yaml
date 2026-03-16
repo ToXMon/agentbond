@@ -1,5 +1,5 @@
 # AgentBond Backend - Akash Deployment
-# Version: 1.0.0
+# Version: 1.1.0
 # Target: Celo Alfajores Testnet + Akave O3 Storage
 # Synthesis Hackathon 2026
 
@@ -8,7 +8,7 @@ version: "2.0"
 services:
   backend:
     image: oven/bun:1.2-alpine
-    
+
     command:
       - sh
       - -c
@@ -17,7 +17,7 @@ services:
         cd /app
         bun install
         bun run src/index.ts
-    
+
     expose:
       - port: 3001
         as: 80
@@ -35,34 +35,37 @@ services:
             - "500"
             - "502"
             - "503"
-    
-    env:\n      # Application Settings
+
+    env:
+      # Application Settings
       - PORT=3001
       - NODE_ENV=production
       - DATA_DIR=/app/data
       - LOG_LEVEL=info
-      
+
       # Celo Blockchain Configuration
       - CELO_RPC_URL=https://alfajores-forno.celo-testnet.org
       - CHAIN_ID=44787
-      
+
       # ERC-8004 Contract Addresses (Celo Alfajores)
       - IDENTITY_REGISTRY=0x8004A169FB4a3325136EB29fA0ceB6D2e539a432
       - REPUTATION_REGISTRY=0x8004BAa17C55a88189AE136b182e5fdA19dE9b63
-      
-      # Akave Storage (replace with actual values)
+
+      # Akave Filecoin Storage (replace with actual values)
       - AKAVE_ENDPOINT=YOUR_AKAVE_ENDPOINT_URL
       - AKAVE_BUCKET=agentbond-main
-      
+      - AKAVE_ACCESS_KEY=YOUR_AKAVE_ACCESS_KEY
+      - AKAVE_SECRET_KEY=YOUR_AKAVE_SECRET_KEY
+
       # CORS Configuration
       - CORS_ORIGINS=https://agentbond.vercel.app,http://localhost:3000
-    
+
     params:
       storage:
         data:
           mount: /app/data
           readOnly: false
-    
+
     healthcheck:
       test:
         - CMD
@@ -95,6 +98,9 @@ profiles:
     akash:
       attributes:
         host: akash
+      signedBy:
+        anyOf:
+          - akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63
       pricing:
         backend:
           denom: uakt
