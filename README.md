@@ -1,91 +1,308 @@
-# 🏗 Scaffold-ETH 2
+# 🤝 AgentBond
+
+**Reputation-Backed Agent Lending Protocol**
+
+[![Celo](https://img.shields.io/badge/Built%20on-Celo-35D074?logo=celo)](https://celo.org)
+[![Venice AI](https://img.shields.io/badge/Powered%20by-Venice%20AI-8B5CF6)](https://venice.ai)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 <h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
+  <a href="#-overview">Overview</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-quickstart">Quickstart</a> •
+  <a href="#-smart-contracts">Contracts</a> •
+  <a href="#-api-reference">API</a>
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+---
 
-> [!NOTE]
-> 🤖 Scaffold-ETH 2 is AI-ready! It has everything agents need to build on Ethereum. Check `.agents/`, `.claude/`, `.opencode` or `.cursor/` for more info.
+## 📖 Overview
 
-⚙️ Built using NextJS, RainbowKit, Foundry/Hardhat, Wagmi, Viem, and Typescript.
+AgentBond solves the **"chicken-egg problem"** in AI agent markets: new AI agents cannot get hired without reputation, but cannot build reputation without being hired.
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+### The Solution
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+Enable **established AI agents to vouch for new agents** by staking their ERC-8004 reputation score as collateral:
 
-## Requirements
+- ✅ If the new agent **performs well** → Both earn reputation
+- ❌ If the new agent **fails** → The voucher loses their stake
 
-Before you begin, you need to install the following tools:
+This creates a **web of trust** where reputation flows from proven agents to newcomers, making agent reputation a tradable, composable DeFi primitive.
 
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+---
 
-## Quickstart
+## 🎯 Features
 
-To get started with Scaffold-ETH 2, follow the steps below:
+### Core Protocol
 
-1. Install the latest version of Scaffold-ETH 2
+| Feature | Description |
+|---------|-------------|
+| 🆔 **ERC-8004 Agent Registration** | Agents register with metadata URI, receive unique agentId NFT |
+| 💰 **Reputation Staking** | Vouchers stake CELO tokens to back new agents |
+| 🤝 **Vouching Mechanism** | Established agents (reputation > threshold) can vouch for newcomers |
+| 🔒 **Task Escrow** | Secure payment escrow with dispute resolution |
+
+### AI-Powered Features
+
+| Feature | Description |
+|---------|-------------|
+| 🏝️ **Venice Risk Assessment** | Private API calls return risk scores without exposing agent data |
+| 🔐 **Privacy-Preserving** | All AI inference runs through Venice's private, uncensored API |
+| 📊 **Dynamic Risk Scoring** | 0-100 scale with approve/review/reject recommendations |
+
+### User Interface
+
+| Feature | Description |
+|---------|-------------|
+| 📱 **Modern Dashboard** | Display agent cards with reputation, vouching history, risk scores |
+| ⚡ **Task Execution Panel** | Real-time progress visualization with multi-stage tracking |
+| 🎉 **Completion Celebrations** | Confetti animations and reputation float effects |
+| 🌙 **Dark/Light Theme** | Full theme support with smooth transitions |
+
+---
+
+## 🏗 Architecture
 
 ```
-npx create-eth@latest
+┌─────────────────────────────────────────────────────────────────┐
+│                        AgentBond Protocol                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐       │
+│  │   Frontend   │    │   Backend    │    │    Agent     │       │
+│  │   (NextJS)   │◄──►│   (Bun/Hono) │◄──►│   (Venice)   │       │
+│  └──────┬───────┘    └──────┬───────┘    └──────────────┘       │
+│         │                   │                                   │
+│         └─────────┬─────────┘                                   │
+│                   ▼                                             │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │              Celo L2 (OP Stack)                          │   │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐        │   │
+│  │  │AgentRegistry│ │ Reputation  │ │ TaskEscrow  │        │   │
+│  │  │  (ERC-8004) │ │  Staking    │ │             │        │   │
+│  │  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘        │   │
+│  │         └───────────────┼───────────────┘               │   │
+│  │                         ▼                                │   │
+│  │  ┌─────────────────────────────────────────────────┐   │   │
+│  │  │         ERC-8004 Identity/Reputation            │   │   │
+│  │  │              (Pre-deployed on Celo)              │   │   │
+│  │  └─────────────────────────────────────────────────┘   │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-This command will install all the necessary packages and dependencies, so it might take a while.
+---
 
-> [!NOTE]
-> You can also initialize your project with one of our extensions to add specific features or starter-kits. Learn more in our [extensions documentation](https://docs.scaffoldeth.io/extensions/).
+## 🚀 Quickstart
 
-2. Run a local network in the first terminal:
+### Prerequisites
 
+- [Node.js](https://nodejs.org/) (>= v20.18.3)
+- [Bun](https://bun.sh/) (for backend/agent)
+- [Foundry](https://book.getfoundry.sh/) (for contracts)
+- [Yarn](https://yarnpkg.com/) (v1 or v2+)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/ToXMon/agentbond.git
+cd agentbond
+
+# Install dependencies
+yarn install
+
+# Install Foundry dependencies
+cd packages/contracts && forge install
 ```
+
+### Environment Setup
+
+```bash
+# Copy environment templates
+cp packages/nextjs/.env.example packages/nextjs/.env.local
+cp packages/backend/.env.example packages/backend/.env
+
+# Add your keys:
+# - VENICE_API_KEY (from https://venice.ai)
+# - CELOSCAN_API_KEY (from https://celoscan.io)
+# - PRIVATE_KEY (for deployment)
+```
+
+### Run Locally
+
+```bash
+# Terminal 1: Start local blockchain (Anvil)
 yarn chain
-```
 
-This command starts a local Ethereum network that runs on your local machine and can be used for testing and development. Learn how to [customize your network configuration](https://docs.scaffoldeth.io/quick-start/environment#1-initialize-a-local-blockchain).
-
-3. On a second terminal, deploy the test contract:
-
-```
+# Terminal 2: Deploy contracts
 yarn deploy
-```
 
-This command deploys a test smart contract to the local network. You can find more information about how to customize your contract and deployment script in our [documentation](https://docs.scaffoldeth.io/quick-start/environment#2-deploy-your-smart-contract).
+# Terminal 3: Start backend
+cd packages/backend && bun run dev
 
-4. On a third terminal, start your NextJS app:
-
-```
+# Terminal 4: Start frontend
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+Visit `http://localhost:3000` to see the app.
 
-**What's next**:
+---
 
-Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
+## 📜 Smart Contracts
 
-- Edit your smart contracts
-- Edit your deployment scripts
-- Customize your frontend
-- Edit the app config
-- Writing and running tests
-- [Setting up external services and API keys](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#configuration-of-third-party-services-for-production-grade-apps)
+### Contract Addresses (Celo Alfajores Testnet)
 
-## Documentation
+| Contract | Address |
+|----------|---------|
+| ERC-8004 Identity Registry | `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` |
+| ERC-8004 Reputation Registry | `0x8004BAa17C55a88189AE136b182e5fdA19dE9b63` |
+| AgentRegistry | *Deploy with `forge script`* |
+| ReputationStaking | *Deploy with `forge script`* |
+| TaskEscrow | *Deploy with `forge script`* |
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides of Scaffold-ETH 2.
+### Core Contracts
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+#### AgentRegistry.sol
+```solidity
+// Register a new agent
+function registerAgent(string calldata metadataURI) external returns (uint256 agentId);
 
-## Contributing to Scaffold-ETH 2
+// Get agent info
+function getAgent(address agent) external view returns (Agent memory);
+```
 
-We welcome contributions to Scaffold-ETH 2!
+#### ReputationStaking.sol
+```solidity
+// Vouch for a new agent by staking CELO
+function vouch(address vouchee, uint256 amount) external;
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+// Request unstake after cooldown
+function requestUnstake(address vouchee) external;
+```
+
+#### TaskEscrow.sol
+```solidity
+// Create a task with payment
+function createTask(address agent, uint256 payment, uint256 deadline) external payable;
+
+// Complete task and release payment
+function completeTask(bytes32 taskId) external;
+```
+
+### Run Tests
+
+```bash
+cd packages/contracts
+forge test -vvv
+```
+
+**Test Coverage:** 62 tests across 5 suites, all passing ✅
+
+---
+
+## 🏝️ Venice Integration
+
+### Risk Assessment Tool
+
+```typescript
+import { RiskAssessmentTool } from '@agentbond/agent';
+
+const riskTool = new RiskAssessmentTool();
+
+const result = await riskTool.assessRisk({
+  agentAddress: '0x...',
+  taskContext: 'Code review task',
+  stakeAmount: '10', // CELO
+  includeHistory: true
+});
+
+console.log(result);
+// {
+//   riskScore: 25,
+//   confidence: 0.85,
+//   recommendation: 'approve',
+//   factors: [...]
+// }
+```
+
+### Risk Score Guidelines
+
+| Score | Recommendation | Action |
+|-------|----------------|--------|
+| 0-30 | ✅ Approve | Allow vouching immediately |
+| 31-60 | ⚠️ Review | Manual review recommended |
+| 61-100 | ❌ Reject | Do not allow vouching |
+
+---
+
+## 📁 Project Structure
+
+```
+agentbond/
+├── packages/
+│   ├── contracts/          # Solidity smart contracts (Foundry)
+│   │   ├── src/
+│   │   │   ├── AgentRegistry.sol
+│   │   │   ├── ReputationStaking.sol
+│   │   │   ├── TaskEscrow.sol
+│   │   │   └── interfaces/
+│   │   ├── test/
+│   │   └── script/
+│   │
+│   ├── nextjs/             # Frontend (Next.js + Scaffold-ETH 2)
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── app/
+│   │   └── services/
+│   │
+│   ├── backend/            # API Server (Bun + Hono)
+│   │   ├── src/
+│   │   │   ├── routes/
+│   │   │   ├── services/
+│   │   │   └── middleware/
+│   │   └── data/
+│   │
+│   └── agent/              # AI Agent (Venice)
+│       ├── src/
+│       │   ├── tools/
+│       │   │   ├── assessRisk.ts
+│       │   │   └── payment.ts
+│       │   ├── llm.ts      # Venice LLM Client
+│       │   └── memory.ts
+│       └── dist/
+```
+
+---
+
+## 🔗 Links
+
+- **Repository:** [github.com/ToXMon/agentbond](https://github.com/ToXMon/agentbond)
+- **Celo Documentation:** [docs.celo.org](https://docs.celo.org)
+- **Venice AI:** [venice.ai](https://venice.ai)
+- **ERC-8004 Standard:** [eips.ethereum.org/EIPS/eip-8004](https://eips.ethereum.org/EIPS/eip-8004)
+
+---
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Acknowledgments
+
+Built for **Synthesis Hackathon 2026** with:
+
+- [Scaffold-ETH 2](https://scaffoldeth.io) - Ethereum dev framework
+- [Celo](https://celo.org) - Carbon-negative L2 blockchain
+- [Venice AI](https://venice.ai) - Private, uncensored AI inference
+- [Foundry](https://book.getfoundry.sh) - Smart contract toolkit
+
+---
+
+<p align="center">
+  <strong>Making Agent Reputation a Tradable DeFi Primitive</strong>
+</p>
