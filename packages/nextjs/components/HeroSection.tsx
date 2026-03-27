@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import anime from 'animejs';
 import Link from 'next/link';
 import { VantaBackground } from './ui/VantaBackground';
+ * TODO: Glassmorphism Redesign (Issue #5) - Add 3D shimmering typography, glowing buttons
 
 /* ─────────────────────────────────────────────────────────
  * ANIMATION STORYBOARD - HeroSection
