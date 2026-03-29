@@ -37,35 +37,51 @@ export function AgentCardEnhanced(props: AgentCardProps) {
   }, []);
   
   return (
-    <div 
+    <div
       ref={cardRef}
       onClick={props.onSelect}
-      className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-slate-700/50 hover:border-purple-500/50 hover:scale-[1.02] transition-all duration-300 cursor-pointer shadow-lg hover:shadow-purple-500/10"
+      className="glass-card p-6 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
     >
-      {/* Agent header with status pulse */}
+      {/* Agent header with glowing status */}
       <div className="flex items-center gap-3 mb-4">
         <div className="relative">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-500/30" />
           {props.isActive && (
-            <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ring-slate-800 animate-pulse" />
+            <span
+              className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full ring-2 ring-slate-900 animate-pulse"
+              style={{ boxShadow: '0 0 8px rgba(74, 222, 128, 0.8)' }}
+            />
           )}
         </div>
         <div>
-          <h3 className="font-semibold text-lg">{props.name}</h3>
+          <h3 className="font-semibold text-lg text-white">{props.name}</h3>
           <p className="text-slate-400 text-sm">{props.specialty}</p>
         </div>
       </div>
-      
+
       {/* Animated reputation */}
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-2xl font-bold text-purple-400" ref={reputationRef}>0</span>
-        <span className="text-slate-500">reputation</span>
+        <span
+          className="text-2xl font-bold"
+          ref={reputationRef}
+          style={{ color: '#a78bfa' }}
+        >
+          0
+        </span>
+        <span className="text-slate-500 text-sm">reputation</span>
       </div>
-      
-      {/* Specialty tags with stagger */}
+
+      {/* Specialty tags */}
       <div ref={tagsRef} className="flex flex-wrap gap-2">
         {props.tags?.map((tag, i) => (
-          <span key={i} className="tag px-3 py-1 bg-slate-700/50 rounded-full text-sm text-slate-300">
+          <span
+            key={i}
+            className="tag px-3 py-1 rounded-full text-xs text-slate-300"
+            style={{
+              background: 'rgba(139, 92, 246, 0.15)',
+              border: '1px solid rgba(139, 92, 246, 0.3)',
+            }}
+          >
             {tag}
           </span>
         ))}
