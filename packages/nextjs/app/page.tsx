@@ -124,7 +124,6 @@ const Home: NextPage = () => {
 
   // Handle vouch confirmation
   const handleVouchConfirm = async (stakeAmount: string) => {
-    console.log("Vouching", stakeAmount, "CELO for", agentToVouch?.name);
     
     if (agentToVouch) {
       try {
@@ -446,7 +445,6 @@ const Home: NextPage = () => {
         earningsAmount={completedTask?.reward || "5.0 CELO"}
         transactionHash={`0x${Date.now().toString(16)}${Math.random().toString(16).slice(2, 10)}`}
         onViewTransaction={() => {
-          console.log("View transaction clicked");
           setShowCelebration(false);
         }}
         onDismiss={() => setShowCelebration(false)}

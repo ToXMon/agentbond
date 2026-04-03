@@ -18,7 +18,6 @@ class Database {
       await fs.mkdir(DATA_DIR, { recursive: true });
       await this.load();
       this.loaded = true;
-      console.log('✅ Database initialized');
     } catch (error) {
       console.error('Database init error:', error);
       throw error;
@@ -47,7 +46,6 @@ class Database {
     vouches.forEach((v: Vouch) => this.vouches.set(v.id, v));
     events.forEach((e: ReputationEvent) => this.reputationEvents.set(e.id, e));
     
-    console.log(`📊 Loaded: ${this.agents.size} agents, ${this.tasks.size} tasks, ${this.vouches.size} vouches, ${this.reputationEvents.size} events`);
   }
 
   private async save(name: string, data: any[]) {

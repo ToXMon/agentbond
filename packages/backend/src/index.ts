@@ -99,8 +99,6 @@ async function start() {
     await db.init();
     
     const port = Number(process.env.PORT) || 3001;
-    console.log(`🚀 AgentBond Backend running on http://localhost:${port}`);
-    console.log(`📊 API docs available at http://localhost:${port}/api`);
     
     serve({ fetch: app.fetch, port });
   } catch (error) {
